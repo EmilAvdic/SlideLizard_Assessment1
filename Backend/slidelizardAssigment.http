@@ -1,0 +1,21 @@
+@slidelizardAssigment_HostAddress = http://localhost:5120
+
+GET {{slidelizardAssigment_HostAddress}}/api/presentation/
+Accept: application/json
+
+###
+
+POST {{slidelizardAssigment_HostAddress}}/api/presentation/
+Content-Type: application/json
+
+{
+  "Name": "Test 3",
+  "FromDate": "2021-01-02",
+  "ToDate": "2021-01-01",
+  "Location": "Test Location"
+}
+
+###
+
+GET {{slidelizardAssigment_HostAddress}}/api/presentation/statistic?fromdate=2020-12-01&todate=2024-12-16
+
