@@ -1,0 +1,45 @@
+﻿@page "/"
+
+@inject HttpClient http
+
+<PageTitle>StartSeite</PageTitle>
+
+<h1>Auflistung</h1>
+
+@if (presentations == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>FromDate</th>
+            <th>ToDate</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var presentation in presentations)
+        {
+            <tr>
+                <td>@presentation.Name.ToString()</td>
+                <td>@presentation.FromDate.ToString()</td>
+                <td>@presentation.ToDate.ToString()</td>
+                <td>@presentation.Location</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code {
+    private List<Presentation>? presentations;
+
+    protected override async Task OnInitializedAsync()
+    {
+        presentations = await http.GetFromJsonAsync<List<Presentation>>("api/presentation");
+    }
+}

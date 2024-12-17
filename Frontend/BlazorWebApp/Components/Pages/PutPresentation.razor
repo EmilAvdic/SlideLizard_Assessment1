@@ -1,0 +1,65 @@
+﻿@page "/put"
+@rendermode InteractiveServer
+@inject HttpClient Http
+
+<PageTitle>Unterseite</PageTitle>
+
+<h1>Anlegung</h1>
+
+@if(isError){
+    <p>Die Presentation gibt es bereits</p>
+}else{
+    <p></p>
+}
+
+<EditForm Model="@presentationModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Name:</label>
+        <InputText @bind-Value="presentationModel.Name" class="form-control" />
+    </div>
+
+    <div>
+        <label>Von Datum:</label>
+        <InputDate @bind-Value="presentationModel.FromDate" class="form-control" />
+    </div>
+
+    <div>
+        <label>Bis Datum:</label>
+        <InputDate @bind-Value="presentationModel.ToDate" class="form-control" />
+    </div>
+
+    <div>
+        <label>Ort:</label>
+        <InputText @bind-Value="presentationModel.Location" class="form-control" />
+    </div>
+
+    <p style="margin-top: 20px;">
+        <button type="submit" class="btn btn-primary">Absenden</button>
+    </p>
+</EditForm>
+
+@code {
+    private Presentation presentationModel = new Presentation();
+    private bool isError = false;
+    private async Task HandleValidSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("api/presentation", presentationModel);
+        Console.WriteLine("Anelgung FromDate: " + presentationModel.FromDate);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Daten erfolgreich versendet!");
+            presentationModel = new Presentation();
+            StateHasChanged();
+            isError = false;
+        }
+        else
+        {
+            isError = true;
+            Console.WriteLine("Fehler beim Senden der Daten.");
+        }
+    }
+}

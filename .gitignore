@@ -1,0 +1,58 @@
+# Visual Studio-Build-Dateien und -Ordner
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.cache
+*.sln.ide
+
+# Binäre Dateien und Build-Ordner
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.db
+*.db-shm
+*.db-wal
+
+# ASP.NET Core User-Secrets
+secrets.json
+
+# Paketmanager-Dateien
+node_modules/
+npm-debug.log
+yarn.lock
+
+# NuGet-Pakete
+*.nupkg
+*.snupkg
+packages/
+!packages/*.md
+
+# Publish-Ordner
+publish/
+wwwroot/lib/
+
+# Log- und temporäre Dateien
+*.log
+**/logs/
+*.tmp
+*.temp
+*.bak
+
+# Rider und JetBrains IDEs
+.idea/
+*.iml
+
+# macOS Dateien
+.DS_Store
+
+# Windows-Dateien
+Thumbs.db
+desktop.ini
+
+# Sonstige konfigurationsbezogene Dateien
+*.env
+appsettings.Development.json
