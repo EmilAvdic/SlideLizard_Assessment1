@@ -1,12 +1,12 @@
 ﻿@page "/"
 
-@inject HttpClient http
+@inject HttpClient Http
 
 <PageTitle>StartSeite</PageTitle>
 
 <h1>Auflistung</h1>
 
-@if (presentations == null)
+@if (_presentations == null)
 {
     <p>Loading...</p>
 }
@@ -22,12 +22,12 @@ else
         </tr>
     </thead>
     <tbody>
-        @foreach (var presentation in presentations)
+        @foreach (var presentation in _presentations)
         {
             <tr>
-                <td>@presentation.Name.ToString()</td>
-                <td>@presentation.FromDate.ToString()</td>
-                <td>@presentation.ToDate.ToString()</td>
+                <td>@presentation.Name</td>
+                <td>@presentation.FromDate.ToShortDateString()</td>
+                <td>@presentation.ToDate.ToShortDateString()</td>
                 <td>@presentation.Location</td>
             </tr>
         }
@@ -36,10 +36,10 @@ else
 }
 
 @code {
-    private List<Presentation>? presentations;
+    private List<Presentation>? _presentations;
 
     protected override async Task OnInitializedAsync()
     {
-        presentations = await http.GetFromJsonAsync<List<Presentation>>("api/presentation");
+        _presentations = await Http.GetFromJsonAsync<List<Presentation>>("api/presentation");
     }
 }

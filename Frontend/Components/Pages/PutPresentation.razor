@@ -6,34 +6,34 @@
 
 <h1>Anlegung</h1>
 
-@if(isError){
+@if(_isError){
     <p>Die Presentation gibt es bereits</p>
 }else{
     <p></p>
 }
 
-<EditForm Model="@presentationModel" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@_presentationModel" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div>
         <label>Name:</label>
-        <InputText @bind-Value="presentationModel.Name" class="form-control" />
+        <InputText @bind-Value="_presentationModel.Name" class="form-control" />
     </div>
 
     <div>
         <label>Von Datum:</label>
-        <InputDate @bind-Value="presentationModel.FromDate" class="form-control" />
+        <InputDate @bind-Value="_presentationModel.FromDate" class="form-control" />
     </div>
 
     <div>
         <label>Bis Datum:</label>
-        <InputDate @bind-Value="presentationModel.ToDate" class="form-control" />
+        <InputDate @bind-Value="_presentationModel.ToDate" class="form-control" />
     </div>
 
     <div>
         <label>Ort:</label>
-        <InputText @bind-Value="presentationModel.Location" class="form-control" />
+        <InputText @bind-Value="_presentationModel.Location" class="form-control" />
     </div>
 
     <p style="margin-top: 20px;">
@@ -42,23 +42,31 @@
 </EditForm>
 
 @code {
-    private Presentation presentationModel = new Presentation();
-    private bool isError = false;
+    private Presentation _presentationModel = new Presentation();
+    private bool _isError;
     private async Task HandleValidSubmit()
     {
-        var response = await Http.PostAsJsonAsync("api/presentation", presentationModel);
-        Console.WriteLine("Anelgung FromDate: " + presentationModel.FromDate);
+        var formattedFromDate = _presentationModel.FromDate.ToString("yyyy-MM-dd");
+        var formattedToDate = _presentationModel.ToDate.ToString("yyyy-MM-dd");
 
+        var response = await Http.PostAsJsonAsync("api/presentation", new
+        {
+            _presentationModel.Name,
+            FromDate = formattedFromDate,
+            ToDate = formattedToDate,
+            _presentationModel.Location
+        });
+        
+        
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Daten erfolgreich versendet!");
-            presentationModel = new Presentation();
-            StateHasChanged();
-            isError = false;
+            _presentationModel = new Presentation();
+            _isError = false;
         }
         else
         {
-            isError = true;
+            _isError = true;
             Console.WriteLine("Fehler beim Senden der Daten.");
         }
     }

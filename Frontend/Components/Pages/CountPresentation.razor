@@ -6,18 +6,18 @@
 
 <h1>Abfrage</h1>
 
-<EditForm Model="@presentationModel" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@_presentationModel" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div>
         <label>Von Datum:</label>
-        <InputDate @bind-Value="presentationModel.FromDate" TValue="DateTime" class="form-control" />
+        <InputDate @bind-Value="_presentationModel.FromDate" class="form-control" />
     </div>
 
     <div>
         <label>Bis Datum:</label>
-        <InputDate @bind-Value="presentationModel.ToDate" TValue="DateTime" class="form-control" />
+        <InputDate @bind-Value="_presentationModel.ToDate" class="form-control" />
     </div>
 
     <p style="margin-top:20px;">
@@ -25,9 +25,9 @@
     </p>
 </EditForm>
 
-@if (presentationModel.Counter > 0)
+@if (_counter > 0)
 {
-    <p>Es wurden @presentationModel.Counter Präsentationen gefunden.</p>
+    <p>Es wurden @_counter Präsentationen gefunden.</p>
 }
 else
 {
@@ -35,31 +35,24 @@ else
 }
 
 @code {
-    private Presentation presentationModel = new Presentation();
-
+    private Presentation _presentationModel = new Presentation();
+    private int _counter;
+    
     private async Task HandleValidSubmit()
     {
-        var queryParams = $"?fromdate={presentationModel.FromDate:yyyy-MM-dd}&todate={presentationModel.ToDate:yyyy-MM-dd}";
+        var queryParams = $"?fromdate={_presentationModel.FromDate:yyyy-MM-dd}&todate={_presentationModel.ToDate:yyyy-MM-dd}";
         var url = $"api/presentation/statistic{queryParams}";
 
         try 
         {
-            presentationModel.Counter = await Http.GetFromJsonAsync<int>(url);
+            _counter = await Http.GetFromJsonAsync<int>(url);
 
-            Console.WriteLine($"Von Datum: {presentationModel.FromDate:yyyy-MM-dd}");
-            Console.WriteLine($"Bis Datum: {presentationModel.ToDate:yyyy-MM-dd}");
-            Console.WriteLine($"Counter: {presentationModel.Counter}");
+            Console.WriteLine($"Von Datum: {_presentationModel.FromDate:yyyy-MM-dd}");
+            Console.WriteLine($"Bis Datum: {_presentationModel.ToDate:yyyy-MM-dd}");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Fehler beim Abrufen der Präsentationen: {ex.Message}");
         }
-    }
-
-    public class Presentation
-    {
-        public DateTime FromDate { get; set; } = DateTime.Now;
-        public DateTime ToDate { get; set; } = DateTime.Now;
-        public int Counter { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 public class Presentation
 {
     public string Name { get; set; } = string.Empty;
-    public DateOnly FromDate { get; set; }
-    public DateOnly ToDate { get; set; }
+    public DateTime FromDate { get; set; } = DateTime.Now;
+    public DateTime ToDate { get; set; } = DateTime.Now;
     public string Location { get; set; } = string.Empty;
 }
